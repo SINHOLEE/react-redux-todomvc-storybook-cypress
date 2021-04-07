@@ -7,7 +7,12 @@ import { connect } from 'react-redux';
 import { listFilters } from '../constants';
 import { toggleAllTodos } from '../actions';
 
-export function Main({ todos, isCompletedAll, toggleAllTodos }) {
+export function Main({
+  todos,
+  isCompletedAll,
+  toggleAllTodos,
+  isTodosLoading
+}) {
   return (
     <section className="main">
       <input
@@ -16,11 +21,14 @@ export function Main({ todos, isCompletedAll, toggleAllTodos }) {
         checked={isCompletedAll}
         onChange={toggleAllTodos}
       />
-      <ul className="todo-list">
-        {todos.map(todo => (
-          <TodoItem key={todo.id} {...todo} />
-        ))}
-      </ul>
+      {isTodosLoading && <div data-testid="todos-loading">loaing...</div>}
+      {!isTodosLoading && (
+        <ul className="todo-list">
+          {todos.map(todo => (
+            <TodoItem key={todo.id} {...todo} />
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
@@ -44,17 +52,15 @@ function getFilteredTodos(todos, nowShowing) {
 const mapStateToProps = (state, ownProps) => {
   const { nowShowing = listFilters.ALL } = ownProps.match.params;
   const todos = getFilteredTodos(state.todos, nowShowing);
+  const isTodosLoading = state.isLoading;
   const isCompletedAll = todos.every(todo => todo.completed);
 
-  return { todos, isCompletedAll };
+  return { todos, isCompletedAll, isTodosLoading };
 };
 
-const mapDispatchToPorps = { toggleAllTodos };
+// const mapDispatchToPorps = { toggleAllTodos };
 
 export default compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToPorps
-  )
+  connect(mapStateToProps, { toggleAllTodos })
 )(Main);

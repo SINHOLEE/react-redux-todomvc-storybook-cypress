@@ -7,12 +7,14 @@ import {
   TOGGLE_ALL_TODOS,
   CLEAR_COMPLETED_TODOS,
   SET_EDITING,
-  RESET_TODOS
+  RESET_TODOS,
+  TOGGLE_LOADING
 } from './actions';
 
 const initialState = {
   todos: [],
-  editing: null
+  editing: null,
+  isLoading: false
 };
 
 function addTodo(todos, text) {
@@ -81,8 +83,17 @@ export function editing(state = initialState.editing, action) {
       return state;
   }
 }
+function isLoading(state = initialState.isLoading, action) {
+  switch (action.type) {
+    case TOGGLE_LOADING:
+      return action.isLoading;
+    default:
+      return state;
+  }
+}
 
 export default combineReducers({
   todos,
-  editing
+  editing,
+  isLoading
 });

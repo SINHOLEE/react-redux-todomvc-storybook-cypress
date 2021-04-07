@@ -7,6 +7,7 @@ export default function FilterButton({ type, isSelected }) {
     <Link
       disabled={isSelected}
       to={'/' + type}
+      data-testid={type}
       className={`filter-item ${isSelected ? 'selected' : ''}`}
     >
       {type}

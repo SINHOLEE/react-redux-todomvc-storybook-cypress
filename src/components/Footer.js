@@ -48,7 +48,4 @@ const mapStateToProps = state => ({
   leftCount: state.todos.filter(todo => !todo.completed).length
 });
 
-export default compose(
-  withRouter,
-  connect(mapStateToProps)
-)(Footer);
+export default compose(withRouter, connect(mapStateToProps))(Footer);

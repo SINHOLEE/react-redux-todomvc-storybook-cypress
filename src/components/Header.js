@@ -45,7 +45,4 @@ export class Header extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { addTodo }
-)(Header);
+export default connect(null, { addTodo })(Header);

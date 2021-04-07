@@ -8,13 +8,12 @@ export const TOGGLE_ALL_TODOS = 'TOGGLE_ALL_TODOS';
 export const CLEAR_COMPLETED_TODOS = 'CLEAR_COMPLETED_TODOS';
 export const SET_EDITING = 'SET_EDITING';
 export const RESET_TODOS = 'RESET_TODOS';
+export const TOGGLE_LOADING = 'TOGGLE_LOADING';
 
-function dispatchWithSync(action) {
-  return (dispatch, getState) => {
-    dispatch(action);
-    axios.put('/todos', getState().todos);
-  };
-}
+const dispatchWithSync = action => (dispatch, getState) => {
+  dispatch(action);
+  axios.put('/todos', getState().todos);
+};
 
 export function addTodo(text) {
   return dispatchWithSync({ type: ADD_TODO, text });
@@ -44,10 +43,14 @@ export function setEditing(id) {
   return dispatchWithSync({ type: SET_EDITING, id });
 }
 
-export function resetTodos() {
-  return async (dispatch, getState) => {
+export const resetTodos = () => async (dispatch, getState) => {
+  dispatch({ type: TOGGLE_LOADING, isLoading: true });
+  try {
     const { data: todos } = await axios.get('/todos');
-
     dispatch({ type: RESET_TODOS, todos });
-  };
-}
+  } catch (error) {
+    throw new Error('todos error');
+  } finally {
+    dispatch({ type: TOGGLE_LOADING, isLoading: false });
+  }
+};

@@ -6,13 +6,15 @@ app.use(express.json());
 let todos = [];
 
 app.get('/todos', (req, res) => {
-  res.send(todos);
+  setTimeout(() => {
+    res.send(todos);
+  }, 5000);
 });
 
 app.put('/todos', (req, res) => {
   todos = req.body;
 
-  res.send({success: true});
+  res.send({ success: true });
 });
 
 app.listen(8081, () => console.log('Listening on port 8081'));
